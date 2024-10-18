@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature Flag Demo</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Welcome to the Feature Flag Controlled Application</h1>
+
+    <!-- Display new feature status -->
+    <div id="feature-content">
+        {% if new_feature %}
+            <h2>New Feature Enabled!</h2>
+        {% else %}
+            <h2>Old Feature</h2>
+        {% endif %}
+    </div>
+
+    <!-- Display special banner component based on feature flag -->
+    <div id="component-content">
+        {% if component_enabled %}
+            <h3>Special Banner Component Enabled</h3>
+        {% else %}
+            <h3>Special Banner Component Disabled</h3>
+        {% endif %}
+    </div>
+
+    <!-- JavaScript to poll the server for flag status changes -->
+    <script type="text/javascript">
+        function checkFeatureFlag() {
+            $.getJSON("/check-feature-flag", function(data) {
+                if (data.new_feature_enabled) {
+                    $("#feature-content").html("<h2>New Feature Enabled!</h2>");
+                } else {
+                    $("#feature-content").html("<h2>Old Feature</h2>");
+                }
+            });
+        }
+
+        // Poll the server every 3 seconds to check for feature flag changes
+        setInterval(checkFeatureFlag, 3000);
+    </script>
+</body>
+</html>
